@@ -1,0 +1,52 @@
+from input_data import depending, influencing, tasks_dict
+
+
+tops = []   # [1, 2, 3, 6] # [2, 3, 6]
+for i in influencing:
+    if i not in depending:
+        tops.append(i)
+# print(tops)
+
+bottoms = []   # [8, 7]
+for i in depending:
+    if i not in influencing:
+        bottoms.append(i)
+# print(bottoms)
+#
+# class cycles:
+#     def __init__(self, just_dict: dict):
+#         self.just_dict = just_dict
+#
+#     def finding_loop(self):
+#         dct = {}
+#         ans = 'all fine'
+#         for i in bottoms:
+#             dct[i] = self.just_dict[i]['deps']
+#             for j in self.just_dict[i]['deps']:
+#                 if j == i:
+#                     ans = 'loop'
+#                     break
+#                 elif all(item in tops for item in self.just_dict[i]['deps']) is True:
+#                     pass
+#                 else:
+#                     dct[i] += self.just_dict[j]['deps']
+#                     for k in self.just_dict[j]['deps']:
+#                         dct[i] += self.just_dict[k]['deps']
+#         return ans
+
+dct = {}
+ans = 'all fine'
+for i in bottoms:
+    dct[i] = tasks_dict[i]['deps']
+    for j in tasks_dict[i]['deps']:
+        if j == i:
+            ans = 'loop'
+            break
+        elif all(item in tops for item in tasks_dict[i]['deps']) is True:
+            pass
+        else:
+            dct[i] += tasks_dict[j]['deps']
+            for k in tasks_dict[j]['deps']:
+                if tasks_dict[k]['deps'] not in dct[i]:
+                    dct[i] += tasks_dict[k]['deps']
+print(ans)
